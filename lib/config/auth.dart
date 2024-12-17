@@ -1,9 +1,9 @@
-import 'package:pamldicka/app/models/user.dart';
+import 'package:pamldicka/app/models/users.dart';
 
 Map<String, dynamic> authConfig = {
   'guards': {
     'default': {
-      'provider': User(),
+      'provider': Users(),
     }
   }
 };

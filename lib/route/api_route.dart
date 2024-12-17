@@ -4,10 +4,30 @@ import 'package:pamldicka/app/http/controllers/orders_controller.dart';
 import 'package:pamldicka/app/http/controllers/products_controller.dart';
 import 'package:pamldicka/app/http/controllers/productnotes_controller.dart';
 import 'package:pamldicka/app/http/controllers/vendors_controller.dart';
+import 'package:pamldicka/app/http/controllers/users_controller.dart';
+import 'package:pamldicka/app/http/controllers/todos_controller.dart';
+import 'package:pamldicka/app/http/controllers/auth_controller.dart';
+import 'package:pamldicka/app/http/middleware/authenticate.dart';
 
 class ApiRoute implements Route {
   @override
   void register() {
+    Router.group((){
+      Router.post('/register', authController.register);
+      Router.post('/login', authController.login);
+    }, prefix: '/auth');
+
+    Router.group(() {
+      Router.patch('/update-password', usersController.updatePassword);
+      Router.get('/', usersController.index);
+    }, prefix: '/user', middleware: [AuthenticateMiddleware()]);
+
+    Router.group(() {
+      Router.post('/todo', todosController.store);
+      Router.put('/todo', todosController.update);
+      Router.delete('/todo', todosController.destroy);
+    }, prefix: '/user', middleware: [AuthenticateMiddleware()]);
+
     Router.group(() { 
       Router.get('/', vendorsController.index); 
       Router.post('/', vendorsController.store); 
